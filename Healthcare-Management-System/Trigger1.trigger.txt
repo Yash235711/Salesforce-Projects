@@ -1,0 +1,10 @@
+When the Appointment status will be null then Scheduled will auto updated
+
+trigger Appointmentnull on Appointment__c (before insert, before update) {
+    
+    for(Appointment__c app : Trigger.new){
+        if(app.Status__c == null){
+            app.Status__c = 'Scheduled';
+        }
+    }
+}
