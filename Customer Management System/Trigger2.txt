@@ -1,0 +1,20 @@
+When the Complaint is Created, and for 2 days it is not resolved, the priority is automatically updated as high if the status is not closed
+
+trigger ComplainHigh on Complaint__c (before update) {
+    
+    for(Complaint__c comp : Trigger.new){
+        
+        Complaint__c compold = Trigger.oldMap.get(comp.id);
+        
+        if(comp.Status__c != 'Closed'){
+            
+            Integer olddays = compCreatedDate.date().daysBetween(Date.today());
+            
+            if(olddays >= 2){
+                comp.Priority__c = 'High';
+                comp.Status__c = 'In Progress';
+            }
+        }
+    }
+
+} 

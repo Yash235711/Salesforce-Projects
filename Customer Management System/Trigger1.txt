@@ -1,0 +1,26 @@
+When the Account is created Contact and Subscription will Auto created
+with the help of after Trigger
+
+trigger NewAccount on Account (after insert) {
+    
+    List<Contact> conlst = new List<Contact>();
+    List<Subscription__c> sublst = new List<Subscription__c>();
+    
+    for(Account acc :Trigger.new){
+        Contact con = new Contact();
+        con.lastName = acc.Name + ' Customer';
+        con.AccountId = acc.Id;
+        conlst.add(con);
+        
+        Subscription__c sub = new Subscription__c();
+        sub.Name = 'Default Plan';
+        sub.Account__c = acc.Id;
+        sub.Status__c = 'Active';
+        sub.Start_Date__c = Date.today();
+        sub.Monthly_Amount__c = 3100;
+        sublst.add(sub);
+    }
+    insert conlst;
+    insert sublst;
+    
+}
